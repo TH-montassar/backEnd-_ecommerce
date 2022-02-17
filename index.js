@@ -12,19 +12,20 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", (err) => {
   console.log("mongoose failed with", err);
 });
-//import routes
+//import routes*
+const productRoute = require("./routes/product.routes");
 
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 //routes middleware
+app.use("/api/products", productRoute);
 
 //server listing
 
 const port = process.env.PORT || 8000;
 
-app.listen(port,()=>{
-    console.log(`server in running on http://localhost:${port}`)
-})
+app.listen(port, () => {
+  console.log(`server in running on http://localhost:${port}`);
+});
