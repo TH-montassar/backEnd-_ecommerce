@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema(
     price: { type: Number },
     // promotionPrice: { type: Number },
     //  isPromotion: { type: Boolean, default: false },
-    //category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
     // reference: { type: String },
       // image: { type: String },
   },

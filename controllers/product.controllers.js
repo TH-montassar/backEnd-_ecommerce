@@ -5,7 +5,7 @@ const createProduct = async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     price: req.body.price,
-    // category: req.body.category,
+    category: req.body.category,
     //  image: req.body.image,
     //  reference: req.body.reference,
   });
@@ -31,7 +31,7 @@ const updateProduct = async (req, res) => {
 const getProduct = async (req, res) => {
   const id = req.params.productId;
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate("category");
     return res.status(200).json(product);
   } catch (err) {
     return res.status(500).json(err);
@@ -39,7 +39,7 @@ const getProduct = async (req, res) => {
 };
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate("category");
     return res.status(200).json(products);
   } catch (err) {
     return res.status(500).json(err);
