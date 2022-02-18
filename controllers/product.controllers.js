@@ -1,3 +1,4 @@
+const Category = require("../models/category.models");
 const Product = require("../models/product.models");
 
 const createProduct = async (req, res) => {
@@ -39,12 +40,39 @@ const getProduct = async (req, res) => {
 };
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+    const products = await Product.find({}).populate("category");
     return res.status(200).json(products);
   } catch (err) {
     return res.status(500).json(err);
   }
 };
+//filterProduct
+const filterProduct = async (req, res) => {
+  let filter = {};
+  if (req.query.category) {
+    filter.category =await Category.findOne({ title: req.query.category }).select("_id")
+  }
+  console.log(filter)
+
+  try {
+    const products = await Product.find(filter).populate("category");
+    return res.status(200).json(products);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+  // let filter={}
+  // if(req.query.category)
+  // {
+  //      filter={category:req.query.category}
+  // }
+  //   try {
+  //     const getProduct = await Product.find(filter).populate("category");
+  //     return res.status(200).json(getProduct);
+  //   } catch (err) {
+  //     return res.status(500).json(err);
+  //   }
+};
+
 const deleteProduct = async (req, res) => {
   const id = req.params.productId;
   try {
@@ -61,3 +89,4 @@ module.exports.updateProduct = updateProduct;
 module.exports.getProduct = getProduct;
 module.exports.getProducts = getProducts;
 module.exports.deleteProduct = deleteProduct;
+module.exports.filterProduct = filterProduct;
