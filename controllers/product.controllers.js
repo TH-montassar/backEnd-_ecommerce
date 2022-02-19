@@ -32,7 +32,7 @@ const updateProduct = async (req, res) => {
 const getProduct = async (req, res) => {
   const id = req.params.productId;
   try {
-    const product = await Product.findById(id).populate("category");
+    const product = await Product.findById(id).populate({path:"category",select:"title"});
     return res.status(200).json(product);
   } catch (err) {
     return res.status(500).json(err);
@@ -40,7 +40,7 @@ const getProduct = async (req, res) => {
 };
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({}).populate("category");
+    const products = await Product.find().populate("category");
     return res.status(200).json(products);
   } catch (err) {
     return res.status(500).json(err);
@@ -50,9 +50,11 @@ const getProducts = async (req, res) => {
 const filterProduct = async (req, res) => {
   let filter = {};
   if (req.query.category) {
-    filter.category =await Category.findOne({ title: req.query.category }).select("_id")
+    filter.category = await Category.findOne({
+      title: req.query.category,
+    }).select("_id");
   }
-  console.log(filter)
+  console.log(filter);
 
   try {
     const products = await Product.find(filter).populate("category");
