@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 const ProductSchema = new mongoose.Schema(
   {
-  
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+
     title: { type: String },
-    // slug: { type: String, unique: true, lowercase: true },
+    slug: { type: String, unique: true, lowercase: true },
     description: { type: String },
     price: { type: Number },
-    // promotionPrice: { type: Number },
-    //  isPromotion: { type: Boolean, default: false },
+    promotionPrice: { type: Number },
+    isPromotion: { type: Boolean, default: false },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-    // reference: { type: String },
-      // image: { type: String },
+    reference: { type: String },
+    image: { type: String },
   },
   { timestamps: true }
 );

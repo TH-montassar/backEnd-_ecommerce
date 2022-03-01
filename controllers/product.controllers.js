@@ -2,16 +2,20 @@ const Category = require("../models/category.models");
 const Product = require("../models/product.models");
 
 const createProduct = async (req, res) => {
+ // console.log("this is from create product",req.verifiedUser._id)
   const newProduct = new Product({
     title: req.body.title,
     description: req.body.description,
     price: req.body.price,
     category: req.body.category,
-    //  image: req.body.image,
-    //  reference: req.body.reference,
+    user:req.verifiedUser._id,
+    image: req.body.image,
+    reference: req.body.reference,
   });
+  console.log( newProduct.category)
   try {
     const savedProduct = await newProduct.save();
+   // console.log(savedProduct)
     return res.status(201).json(savedProduct);
   } catch (err) {
     return res.status(500).json(err);
@@ -39,25 +43,17 @@ const getProduct = async (req, res) => {
   }
 };
 const getProducts = async (req, res) => {
-  try {
-    const products = await Product.find().populate("category");
-    return res.status(200).json(products);
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-//filterProduct
-const filterProduct = async (req, res) => {
+ // console.log(req.verifiedUser)
   let filter = {};
   if (req.query.category) {
     filter.category = await Category.findOne({
       title: req.query.category,
     }).select("_id");
   }
-  console.log(filter);
+ //console.log("this is from filter",filter);
 
   try {
-    const products = await Product.find(filter).populate("category");
+    const products = await Product.find(filter).populate("user").populate("category");
     return res.status(200).json(products);
   } catch (err) {
     return res.status(500).json(err);
@@ -74,6 +70,8 @@ const filterProduct = async (req, res) => {
   //     return res.status(500).json(err);
   //   }
 };
+//filterProduct
+
 
 const deleteProduct = async (req, res) => {
   const id = req.params.productId;
@@ -91,4 +89,4 @@ module.exports.updateProduct = updateProduct;
 module.exports.getProduct = getProduct;
 module.exports.getProducts = getProducts;
 module.exports.deleteProduct = deleteProduct;
-module.exports.filterProduct = filterProduct;
+
