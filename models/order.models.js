@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const OrderSchema = mongoose.Schema(
-  {  //item dinormalize
+  {
+    //item dinormalize
     items: [
-        
       {
         Product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
         price: { type: Number, min: 0 },
@@ -15,6 +15,7 @@ const OrderSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ["canceled", "pending", "confirmed", "fulfilled"],
+      default: "pending",
     },
     address: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
     totalPriceWithTax: { type: Number, min: 0 },
@@ -23,4 +24,6 @@ const OrderSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
 module.exports = mongoose.model("Order", OrderSchema);

@@ -10,12 +10,14 @@ const createProduct = async (req, res) => {
     category: req.body.category,
     user:req.verifiedUser._id,
     image: req.body.image,
+  //  promotionPrice:req.body.promotionPrice,
     reference: req.body.reference,
+   // isPromotion: req.body.isPromotion
   });
-  console.log( newProduct.category)
+  //console.log( newProduct.category)
   try {
     const savedProduct = await newProduct.save();
-   // console.log(savedProduct)
+    console.log(savedProduct)
     return res.status(201).json(savedProduct);
   } catch (err) {
     return res.status(500).json(err);

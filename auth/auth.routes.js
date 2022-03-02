@@ -2,6 +2,7 @@ const User = require("../models/user.models");
 const Address = require("../models/address.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Cart = require("../models/cart.models");
 
 const router = require("express").Router();
 router.post("/register", async (req, res) => {
@@ -21,17 +22,21 @@ router.post("/register", async (req, res) => {
       zipCode: req.body.zipCode
     });
     const savedAddress = await newAddress.save();
-    console.log(savedAddress)
+   // console.log(savedAddress)
 
     const salt = await bcrypt.genSalt(16);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
+    //! creation cart 
+    const newCart = new Cart();
+    const savedCard= await newCart.save();
+    //!------
     const newUser = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
       password: hashedPassword,
       address: savedAddress._id,
+      cart:savedCard._id
     });
 
     const savedUser = await newUser.save();
@@ -68,7 +73,10 @@ router.post("/login", async (req, res) => {
       /* payload */ {
         _id: user._id,
         email: user.email,
-        name: user.firstName /*firstName:user.firstName}*/,
+        name: user.firstName,
+        cart:user.cart,
+        address:user.address
+        /*firstName:user.firstName}*/,
       },
       process.env.TOKEN_KEY,
       { expiresIn: "3 days" }
@@ -76,7 +84,9 @@ router.post("/login", async (req, res) => {
     //console.log(user._id)
 
     return res.status(200).json({ user: user, token: token });
-  } catch (err) {}
+  } catch (err) {
+    return res.status(500).json(err)
+  }
 });
 
 router.get("/user", async (req, res) => {

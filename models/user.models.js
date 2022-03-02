@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Cart = require("./cart.models");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -13,10 +14,23 @@ const UserSchema = new mongoose.Schema(
     },
     password: { type: String },
     address: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
-    // isAdmin: { type: Boolean, default: false },
-    // cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
+    isAdmin: { type: Boolean, default: false },
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
   },
   { timestamps: true }
 );
 
+//* ma5doumine fel register fi satrine hhh aka lmfa5in louta hhh
+// UserSchema.post("save", function (doc, next) {
+//   if (!this.cart) {
+//     this.createCart();
+//   }
+
+//   next();
+// });
+// UserSchema.methods.createCart = async function () {
+//   // const newCart = new Cart();
+//   // this.cart = (await newCart.save())._id;
+//   this.save();
+// };
 module.exports = mongoose.model("User", UserSchema);
