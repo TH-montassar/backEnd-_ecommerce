@@ -18,7 +18,7 @@ const verifyToken =require("../middlewares/verifyToken")
 
 router.post("/", verifyToken, createProduct);
 router.put("/:productId", verifyToken, updateProduct);
-router.get("/:productId", getProduct);
+router.get("/:productSlug", getProduct);
 
 router.get("/", verifyToken, getProducts);
 router.delete("/:productId", verifyToken, deleteProduct);

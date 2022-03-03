@@ -36,9 +36,9 @@ const updateProduct = async (req, res) => {
   }
 };
 const getProduct = async (req, res) => {
-  const id = req.params.productId;
+  const productSlug = req.params.productSlug;
   try {
-    const product = await Product.findById(id).populate({path:"category",select:"title"});
+    const product = await Product.findOne({slug:productSlug}).populate({path:"category",select:"title"});
     return res.status(200).json(product);
   } catch (err) {
     return res.status(500).json(err);

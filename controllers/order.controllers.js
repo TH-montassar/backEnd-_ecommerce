@@ -10,7 +10,7 @@ const createOrder = async (req, res) => {
     taxPercentage: cart.taxPercentage,
 
     address: req.verifiedUser.address,
-    client: req.verifiedUser._id
+    client: req.verifiedUser._id,
   });
 
   try {
@@ -29,6 +29,17 @@ const getOrder = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+
+const meOrder = async (req, res) => {
+  const orderId = req.verifiedUser.order;
+  try {
+    const address = await Address.findById(orderId);
+    return res.status(200).json(address);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
 const getOrders = async (req, res) => {
   try {
     const getOrders = await Order.find();
@@ -38,11 +49,42 @@ const getOrders = async (req, res) => {
   }
 };
 
-//const deleteOrder = async (req, res) => {};
-//const updateOrder = async (req, res) => {};
+const getMyOrder = async (req, res) => {
+  const currentUser = req.verifiedUser._id;
+  console.log("orderController", currentUser);
+
+  try {
+    const orders = await Order.find({ client: currentUser });
+    if (!orders) {
+      return res.status(422).json("no order");
+    } else {
+      return res.status(200).json(orders);
+    }
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+const changeStatusOrder = async (req, res) => {
+  //const currentUser = req.verifiedUser._id;
+  //console.log("orderController", currentUser);
+  const orderId = req.params.orderId;
+  const status =req.body.status
+
+  try {
+    const orders = await Order.findOneAndUpdate(orderId, status, {
+      new: true,
+    });
+    return res.status(200).json(orders);
+
+ 
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
 module.exports.createOrder = createOrder;
 module.exports.getOrder = getOrder;
 module.exports.getOrders = getOrders;
 
-//module.exports.deleteOrder = deleteOrder;
-//module.exports.updateOrder = updateOrder;
+module.exports.getMyOrder = getMyOrder;
+module.exports.changeStatusOrder = changeStatusOrder;

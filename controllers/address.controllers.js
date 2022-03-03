@@ -33,6 +33,20 @@ const getAddress = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+
+const meAddresses = async (req, res) => {
+  const addressId=req.verifiedUser.address
+  try {
+      const address = await Address.findById(addressId);
+      return res.status(200).json(address);
+  } catch (err) {
+      return res.status(500).json(err);
+  }
+};
+
+
+
+
 const getAddresses = async (req, res) => {
   try {
     const getAddresses = await Address.find();
@@ -61,6 +75,10 @@ const deleteAddress = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+
+
+module.exports.meAddresses = meAddresses;
+
 
 module.exports.createAddress = createAddress;
 module.exports.getAddress = getAddress;

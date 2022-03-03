@@ -24,9 +24,9 @@ const updateCategory = async (req, res) => {
   }
 };
 const getCategory = async (req, res) => {
-  const id = req.params.categoryId;
+  const categorySlug= req.params.categorySlug;
   try {
-    const category = await Category.findById(id);
+    const category = await Category.findOne({slug:categorySlug});
     return res.status(200).json(category);
   } catch (err) {
     return res.status(500).json(err);

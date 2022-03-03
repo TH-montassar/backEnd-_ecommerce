@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var slug = require("slug");
+const slug = require("slug");
 const ProductSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
